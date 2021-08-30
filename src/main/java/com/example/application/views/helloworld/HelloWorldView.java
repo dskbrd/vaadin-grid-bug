@@ -76,6 +76,9 @@ public class HelloWorldView extends Div implements BeforeEnterObserver {
         add(splitLayout);
 
         // Configure Grid
+        // Change the pageSize to something small so we can see the issue more easily
+        grid.setPageSize(15);
+        
         grid.addColumn("firstName").setAutoWidth(true);
         grid.addColumn("lastName").setAutoWidth(true);
         grid.addColumn("email").setAutoWidth(true);
@@ -87,6 +90,13 @@ public class HelloWorldView extends Div implements BeforeEnterObserver {
                 .withProperty("important", SamplePerson::isImportant);
         grid.addColumn(importantRenderer).setHeader("Important").setAutoWidth(true);
 
+        // Set Multisort to true
+        grid.setMultiSort(true);
+        // Sort by two or more columns (does not matter which columns) 
+        var sorting = List.of(new GridSortOrder<>(grid.getColumns().get(5), SortDirection.ASCENDING),
+          new GridSortOrder<>(grid.getColumns().get(1), SortDirection.ASCENDING));
+        grid.sort(sorting);
+        
         grid.setDataProvider(new CrudServiceDataProvider<>(samplePersonService));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
         grid.setHeightFull();
